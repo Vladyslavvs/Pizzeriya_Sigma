@@ -1,0 +1,167 @@
+body,html{
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	background-color: #090909;
+	color:#D10606;
+}
+
+.orders{
+	margin:0 auto 0 auto;
+	height: 500px;
+	width: 80%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	margin-top: 30px;
+}
+
+.orders::-webkit-scrollbar { width: 3px;}
+.orders::-webkit-scrollbar-track-piece { background-color: #090909;}
+.orders::-webkit-scrollbar-thumb { background-color: #D10606;}
+
+.order{
+	border:1px solid red;
+	height: 150px;
+	margin-bottom: 15px;
+}
+
+.id{
+	margin-left: 10px;
+}
+
+.name{
+	position: relative;
+	bottom: 34px;
+	left:190px;
+}
+
+.last_name{
+	position: relative;
+	bottom: 68px;
+	left:390px;
+}
+
+.streat{
+	position: relative;
+	bottom: 180px;
+	left:10px;
+}
+
+.house{
+	position: relative;
+	left:10px;
+	bottom: 190px;
+}
+
+.padik{
+	position: relative;
+	left:10px;
+	bottom: 200px;
+}
+
+.flat{
+	position: relative;
+	left:10px;
+	bottom: 205px;
+}
+
+.date{
+	position: relative;
+	bottom: 106px;
+	left:85%;
+}
+
+.oplata{
+	position: relative;
+	bottom: 315px;
+	left:190px;
+}
+
+.email{
+	position: relative;
+	bottom: 327px;
+	left:190px;
+}
+
+.view_pizzas{
+	position: relative;
+	bottom: 130px;
+	left:840px;
+}
+
+.sum{
+	position: relative;
+	bottom: 98px;
+	left:190px;
+}
+
+.phone{
+	position: relative;
+	bottom: 307px;
+	left:190px;
+}
+
+label[for="view"]
+{
+	position: relative;
+	bottom: 380px;
+	float:right;
+	right: 40px;
+}
+
+label[for="ready"]
+{
+	position: relative;
+	bottom: 350px;
+	float:right;
+	left:58px;
+}
+
+input[name="view"]
+{
+	position: relative;
+	bottom: 380px;
+	float:right;
+	left:78px;
+}
+
+input[name="ready"]
+{
+	position: relative;
+	bottom: 350px;
+	float:right;
+	left:176px;
+}
+
+.pizzas{
+	position: relative;
+	bottom: 415px;
+	left:730px;
+	border:1px solid red;
+	height: 85px;
+	width: 300px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.pizzas::-webkit-scrollbar { width: 3px;}
+.pizzas::-webkit-scrollbar-track-piece { background-color: #090909;}
+.pizzas::-webkit-scrollbar-thumb { background-color: #D10606;}
+
+select{
+	background-color: #090909;
+	border:1px solid red;
+	color:red;
+}
+
+#sort{
+	position: fixed;
+	top:30px;
+	left:20px;
+}
+
+#count{
+	position: fixed;
+	top:30px;
+	right: 20px;
+}
+

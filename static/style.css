@@ -1,0 +1,352 @@
+
+body,html{
+    background-color: #090909;
+    color:#D10606;
+}
+
+
+.nav{
+    height: 60px;
+    background-color: #D10606;
+}
+
+.number{
+	font-size: 20px;
+    top:15px;
+    left:400px;
+    position: absolute;
+    color:#090909;
+}
+
+.menu{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: fixed;
+    top:75px;
+    left:200px;
+    width: 230px;
+    text-align: center;
+    border: 1px solid #D10606;
+    right: 100px;
+    height: 820px;
+    background-color: #090909;
+    color:#D10606;
+}
+
+.menu::-webkit-scrollbar { width: 3px; height: 3px;}
+.menu::-webkit-scrollbar-track-piece { background-color: #090909;}
+.menu::-webkit-scrollbar-thumb { height: 50px; background-color: #D10606; border-radius: 3px;}
+
+.menu div{
+    display: flex;
+    padding-left: 15px;
+}
+
+.menu p{
+    font-size: 25px;
+}
+
+
+.menu div p{
+    font-size: 20px;
+    position: relative;
+    bottom: 10px;
+    padding-left: 10px;
+}
+
+.all-pizza{
+    position: relative;
+    display: grid;
+    width: 710px;
+    grid-column-gap: 15px;
+    background-color: #090909;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin: 0 auto;
+    color:#D10606;
+}
+
+.pizza{
+    margin-top: 15px;
+    border: 1px solid #D10606;
+    padding: 15px 15px 15px 15px;
+    width: 230px;
+
+}
+
+.pizza :nth-child(2){
+    padding-top: 5px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.pizza :nth-child(3){
+    font-size: 16px;
+    text-align: center;
+}
+
+.size{
+    display: flex;
+    flex-direction: row;
+}
+
+.size div p{
+    float :right;
+    padding-right: 5px;
+}
+
+
+.pizza img{
+    height: 200px;
+    width: 200px;
+}
+
+.cost{
+    text-align: center;
+    font-size: 20px;
+}
+
+.avaible{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.container{
+    background-color: #090909;
+}
+
+.avaible p{
+    position: relative;
+    left:10px;
+    top:-23px;
+}
+
+.ingradients{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.ingradients p{
+    top:-23px;
+    left:10px;
+}
+
+.basket{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    top:75px;
+    position :fixed;
+    right: 200px;
+    text-align: center;
+    height: 820px;
+    width: 230px;
+    border: 1px solid #D10606;
+    background-color: #090909;
+    color:#D10606;
+}
+
+.basket::-webkit-scrollbar { width: 3px; height: 3px;}
+.basket::-webkit-scrollbar-track-piece { background-color: #090909;}
+.basket::-webkit-scrollbar-thumb { height: 50px; background-color: #D10606; border-radius: 3px;}
+
+.basket p{
+    font-size: 25px;
+}
+
+.pizza-in-basket{
+    border:1px solid #D10606;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 7px;
+    height: 115px;
+}
+
+.pizza-in-basket p{
+    font-size: 18px;
+}
+
+
+.diametr{
+	text-align: left;
+	padding-left: 10px;
+}
+
+.bas-weight{
+	position: relative;
+	top:-43px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.btn-remove-bas{
+	position: relative;
+	background-color: transparent;
+	border: none;
+	top:-170px;
+	left:90px;
+}
+ 
+.btn-remove-bas:focus {
+    outline: none;
+}
+
+.buy{
+    color:#D10606;
+    background-color: #090909;
+    border:1px solid #D10606;
+    position: relative;
+    left:50px;/*98px;*/
+    height: 40px;
+    width: 100px;
+    z-index: 1;
+}
+
+button:hover{
+    color:white;
+}
+
+.action{
+	position: relative;
+	top:15px;
+	z-index: 1;
+	width: 90%;
+	margin: 0 auto 0 auto;
+	background-color: #D10606;
+}
+
+.action_name{
+	text-align: center;
+	font-size: 20px;
+	color:#090909;
+	margin-bottom: 0px;
+}
+
+.action_desc{
+	text-align: center;
+	font-size: 20px;
+	color:#090909;
+	padding-bottom: 5px;
+}
+
+.action_pizza{
+	font-size: 25px;
+	text-align: left;
+	position: relative;
+	bottom: 40px;
+	left:5px;
+	margin-bottom: -38px;
+	display: none;
+}
+
+.sign{
+	position: absolute;
+    right: 50px;
+    display: none;
+    top:15px;
+}
+
+.sign_up {
+	color:#090909;
+}
+
+.log_in{
+	color:#090909;
+}
+
+.sign_up:hover{
+	text-decoration: none;
+	color:white;
+}
+
+.log_in:hover{
+	text-decoration: none;
+	color:white;
+}
+
+.logined{
+	position: absolute;
+    right: 50px;
+    top:15px;
+}
+
+.user_name{
+	color:white !important;
+}
+
+.log_out{
+	color:#090909;
+}
+
+.log_out:hover{
+	text-decoration: none;
+	color:white;
+}
+
+
+
+
+.switch {
+	top:10px;
+	left:150px;
+  position: absolute;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+input:checked + .slider {
+  background-color: black;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Админ панель</title>
+	<link rel="stylesheet" type="text/css" href="reg_action.css">
+</head>
+<body>
+		<label for="name">Имя</label>
+		<input name="name" value="Акция на день города"></input>
+		<label for="desc">Описание</label>
+		<input name="desc" value="Купите 2 Маргариты и получите скидку 3%"></input>
+		<label for="pizza">Выбрать пиццу</label>
+		<select class="pizza">
+			<option value="1">Маргарита</option>
+			<option value="2">Маргарита</option>
+			<option value="3">Маргарита</option>
+			<option value="4">Маргарита</option>
+		</select>
+		<label for="count">Выбрать количество пицц</label>
+		<input name="count" value="1"></input>
+		<label for="day">Выбрать день действия</label>
+		<select class="day">
+			<option value="All">Все дни</option>
+			<option value="Monday">Понедельник</option>
+			<option value="Tuesday">Вторник</option>
+		</select>
+		<label for="date_begin">Выбрать дату начала</label>
+		<input  type="date" name="date_begin" value="1"></input>
+		<label for="date_end">Выбрать дату конца</label>
+		<input  type="date" name="date_end" value="1"></input>
+		<label for="discount">Выбрать скидку</label>
+		<input name="discount" min=1 max=60 value="1"></input>
+		<button class="save">Сохранить</button>
+</body>
+</html>

@@ -1,0 +1,162 @@
+body,html{
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	
+}
+.order_label{
+	text-align: center;
+	display: block;
+	padding-top: 30px;
+}
+
+.order_summ{
+	text-align: center;
+	display: block;
+	left:100px;
+}
+
+.order_table{
+	margin: auto;
+	text-align: center;
+	color:#D10606;
+}
+
+.table{
+	border-bottom: 1px solid #D10606;
+	overflow-y: scroll;
+	max-height: 250px;
+}
+
+.table::-webkit-scrollbar { width: 3px;}
+.table::-webkit-scrollbar-track-piece { background-color: black;}
+.table::-webkit-scrollbar-thumb { background-color: red;}
+
+.address{
+	padding-top: 20px;
+	padding-left: 20px;
+	float: left;
+}
+
+input{
+	background-color: black;
+	border: 1px solid #D10606;
+	color:red;
+	text-align: center;
+}
+
+
+.order_info_delivery{
+	padding-left: 100px;
+	padding-bottom: 20px;
+}
+
+label{
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+.about_person{
+	float:right;
+	padding-top: 20px;
+}
+
+.order_about_person{
+	padding-left: 190px;
+	padding-bottom: 20px;s
+}
+
+span:hover{
+	cursor: pointer;
+}
+
+button{
+	width: 25px;
+	background-color: #090909;
+	height: 25px;
+	border:none;
+	color:red;
+}
+
+button:hover{
+	color:white;
+}
+
+button:focus{
+	outline: none !important
+}
+
+select{
+	background-color: #090909;
+	border:1px solid red;
+	color:red;
+}
+
+.oplata{
+	float:left;
+	top:230px;
+	right: 500px;
+	position: relative;
+}
+	
+.oplata_div{
+	height: 200px;
+	width: 500px;
+	border:1px solid red;
+	top:320px;
+	position: relative;
+	left: 30px;
+}	
+
+.add_order{
+	position: relative;
+	top:80px;
+	left:600px;
+	width: 30%;
+}
+
+.add{
+	position: relative;
+	background-color: #090909;
+	height: 200px;
+	border:1px solid red;
+	color:red;
+	padding-left: 10px;
+	padding-top: 5px;
+	width: 400px;
+	resize: none;
+}
+
+
+.oform{
+	position: relative;
+	border:1px solid red;
+	height: 70px;
+	width: 190px;
+	right: 500px;
+	font-size: 30px;
+	bottom: 60px;
+	float:right;
+}
+
+.oform:hover{
+	background-color: #D10606;
+}
+
+.action{
+	margin-bottom:0px;
+	margin-top:0px;
+	text-align: center;
+}
+
+.main_summ{
+	text-align: center;
+}
+
+.back{
+	position: absolute;
+	top:150px;
+	left: 150px;
+	border:1px solid red;
+	width: 10%;
+	height: 40px;
+}

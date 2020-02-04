@@ -1,0 +1,320 @@
+﻿@model List<Pizzeriya.Models.Order>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Прием заказов</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/operator_main_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/operator_main_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+    <label class="switch">
+        <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+        <span class="slider round"></span>
+    </label>
+    <div class="orders">
+        @foreach (var order in @Model)
+        {
+            <div class="order">
+                <input type="hidden" name="id" value="@order.OrderId">
+                <p class="id">Заказ: @order.OrderId</p>                
+                <p class="name">Имя: @(@order.FirstName==""?"нет":@order.FirstName)</p>
+                <p class="last_name">Фамилия: @(@order.LastName == "" ? "нет" : @order.LastName)</p>
+                <p class="date">Дата заказа: @order.DateOfOrder</p>
+                <p class="view_pizzas">Список пицц</p>
+                <p class="sum">Сумма: @order.Cost грн</p>
+                <p class="streat">Улица: @(@order.Streat == "" ? "нет" : @order.Streat)</p>
+                <p class="house">Дом: @(@order.House == "" ? "нет" : @order.House)</p>
+                <p class="padik">Подъезд: @(@order.Padik == "" ? "нет" : @order.Padik)</p>
+                <p class="flat">Квартира: @(@order.Flat == "" ? "нет" : @order.Flat)</p>
+                <p class="oplata">Способ оплаты: @order.PaymentMethod</p>
+                <p class="email">Email: @(@order.Email == "" ? "нет" : @order.Email)</p>
+                <p class="phone">Телефон: @(@order.PhoneNumber == "" ? "нет" : @order.PhoneNumber)</p>
+                <label for="view">Просмотрено</label>
+                @if (@order.View == "View")
+                {
+                    <input type="checkbox" checked name="view">
+                }
+                else
+                {
+                    <input type="checkbox" name="view">
+                }
+                <label for="ready">Выполнено</label>
+                @if (@order.Ready == "Ready")
+                {
+                    <input type="checkbox" checked name="ready">
+                }
+                else
+                {
+                    <input type="checkbox" name="ready" />
+                }
+                <div class="pizzas">
+                    <table>
+                        @{
+                            int count = 1;
+                        }
+                        @foreach (var pizza in order.pizzaInOrder)
+                        {
+                            <tr>
+                                <th>@count</th>
+                                <th>@pizza.Name</th>
+                                <th>@pizza.PizzaCount шт</th>
+                                <th>@pizza.PizzaSize см</th>
+                                <th>@pizza.PizzaWeight грамм</th>
+                            </tr>
+                            {
+                                count++;
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+    <select id="sort">
+        <option selected value="date">По дате</option>
+        <option value="ready">Последние выполненные</option>
+        <option value="view">Последние просмотренные</option>
+    </select>
+
+    <select id="count">
+        <option value="all" selected>Все</option>
+        <option selected value="10">Последние 10</option>
+        <option value="50">Последние 50</option>
+        <option value="100">Последние 100</option>
+        <option value="200">Последние 200</option>
+        <option value="500">Последние 500</option>
+    </select>
+
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+    <script>
+
+        CreateOrder = (data) => {
+            let order = document.createElement('div');
+            order.className = "order";
+            let id = document.createElement('input');
+            id.type = "hidden";
+            id.value = data.OrderId;
+            let PId = document.createElement('p');
+            PId.className = "id";
+            PId.innerHTML = "Заказ: " + data.OrderId;
+            let PName = document.createElement('p');
+            PName.className = "name";
+            PName.innerHTML = "Имя: " + data.FirstName;
+            let PLast = document.createElement('p');
+            PLast.className = "last_name";
+            PLast.innerHTML = "Фамилия: " + data.LastName;
+            let PDate = document.createElement('p');
+            PDate.className = "date";
+            let d = new Date(Date.parse(data.DateOfOrder));
+            PDate.innerHTML = "Дата заказа: " + data.DateOfOrder;
+            let PView = document.createElement('p');
+            PView.className = "view_pizzas";
+            PView.innerHTML = "Список пицц";
+            let PSum = document.createElement('p');
+            PSum.className = "sum";
+            PSum.innerHTML = "Сумма: " + data.Cost+" грн";
+            let PStreat = document.createElement('p');
+            PStreat.className = "streat";
+            PStreat.innerHTML = "Улица: " + data.Streat;
+            let PHouse = document.createElement('p');
+            PHouse.className = "house";
+            PHouse.innerHTML = "Дом: " + data.House;
+            let PPadik = document.createElement('p');
+            PPadik.className = "padik";
+            PPadik.innerHTML = "Подъезд: " + data.Padik;
+            let PFlat = document.createElement('p');
+            PFlat.className = "flat";
+            PFlat.innerHTML = "Квартира: " + data.Flat;
+            let PPay = document.createElement('p');
+            PPay.className = "oplata";
+            PPay.innerHTML = "Способ оплаты: " + data.PaymentMethod;
+            let PEmail = document.createElement('p');
+            PEmail.className = "email";
+            PEmail.innerHTML = "Email: " + data.Email;
+            let PPhone = document.createElement('p');
+            PPhone.className = "phone";
+            PPhone.innerHTML = "Телефон: " + data.PhoneNumber;
+            let label = document.createElement('label');
+            label.htmlFor = "view";
+            label.innerHTML = "Просмотрено";
+            let inpView = document.createElement('input');
+            inpView.type = "checkbox";
+            inpView.name = "view";
+            if (data.View == "View") {
+                inpView.checked = true;
+            }
+            else {
+                inpView.checked = false;
+            }
+            let labelRead = document.createElement('label');
+            labelRead.htmlFor = "ready";
+            labelRead.innerHTML = "Выполнено";
+            let inpRead = document.createElement('input');
+            inpRead.type = "checkbox";
+            inpRead.name = "ready";
+            if (data.Ready == "Ready") {
+                inpRead.checked = true;
+            }
+            else {
+                inpRead.checked = false;
+            }
+            let pizzas = document.createElement('div');
+            pizzas.className = "pizzas";
+            let table = document.createElement('table');
+            for (let i = 0; i < data.pizzaInOrder.length; i++) {
+                let tr = document.createElement('tr');
+                let thId = document.createElement('th');
+                thId.innerHTML = data.pizzaInOrder[i].Id;
+                let thName = document.createElement('th');
+                thName.innerHTML = data.pizzaInOrder[i].Name;
+                let thCount = document.createElement('th');
+                thCount.innerHTML = data.pizzaInOrder[i].PizzaCount+" шт";
+                let thSize = document.createElement('th');
+                thSize.innerHTML = data.pizzaInOrder[i].PizzaSize+" см";
+                let thWeight = document.createElement('th');
+                thWeight.innerHTML = data.pizzaInOrder[i].PizzaWeight + " грамм";
+                tr.append(thId);
+                tr.append(thName);
+                tr.append(thCount);
+                tr.append(thSize);
+                tr.append(thWeight);
+                table.append(tr);
+            }
+            pizzas.append(table);
+            order.append(id);
+            order.append(PId);
+            order.append(PName);
+            order.append(PLast);
+            order.append(PDate);
+            order.append(PView);
+            order.append(PSum);
+            order.append(PStreat);
+            order.append(PHouse);
+            order.append(PPadik);
+            order.append(PFlat);
+            order.append(PPay);
+            order.append(PEmail);
+            order.append(PPhone);
+            order.append(label);
+            order.append(inpView);
+            order.append(labelRead);
+            order.append(inpRead);
+            order.append(pizzas);
+            return order;
+        }
+
+        ChangeCount = (e) => {
+            e.target.disabled = true;
+            let valueCount = e.target.value;
+            let valueSort = document.getElementById('sort').value;
+            $.get('@Url.Action("GetOrder")', { Count: valueCount, By: valueSort }, function (data) {
+                document.getElementsByClassName('orders')[0].innerHTML = '';
+                for (let i = 0; i < data.length; i++) {
+                    let order = CreateOrder(data[i]);
+                    document.getElementsByClassName('orders')[0].append(order);
+                    e.target.disabled = false;
+                };
+            });
+        }
+
+        ChangeSort = (e) => {
+            e.target.disabled = true;
+            let valueCount = document.getElementById('count').value;
+            let valueSort = e.target.value;
+            $.get('@Url.Action("GetOrder")', { Count: valueCount, By: valueSort}, function (data) {
+                document.getElementsByClassName('orders')[0].innerHTML = '';
+                for (let i = 0; i < data.length; i++) {
+                    let order = CreateOrder(data[i]);
+                    document.getElementsByClassName('orders')[0].append(order);
+                    e.target.disabled = false;
+                };
+            });
+        }
+
+        OnViewChange = (e) => {
+            e.target.disabled = true;
+            let isView = e.target.checked;
+            let id = e.target.parentElement.getElementsByTagName('input')[0].value;
+            $.get('@Url.Action("SetOrderView")', { Id: id, IsView: isView }, function (data) {
+                if (data === 'ok') {
+                    e.target.disabled = false;
+                }
+            })
+        }
+
+          OnReadyChange = (e) => {
+            e.target.disabled = true;
+            let isReady = e.target.checked;
+            let id = e.target.parentElement.getElementsByTagName('input')[0].value;
+            $.get('@Url.Action("SetOrderReady")', { Id: id, IsReady: isReady }, function (data) {
+                if (data === 'ok') {
+                    e.target.disabled = false;
+                }
+            })
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/operator_main_dark.css";
+                  $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/operator_main_light.css";
+                 $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+        var sel_sort = document.getElementById('sort');
+        var sel_count = document.getElementById('count');
+
+        var inp_view = document.getElementsByName('view');
+        for (let i = 0; i < inp_view.length; i++)
+            inp_view[i].addEventListener('change', OnViewChange);
+
+        var inp_ready = document.getElementsByName('ready');
+        for (let i = 0; i < inp_ready.length; i++)
+            inp_ready[i].addEventListener('change', OnReadyChange);
+
+        sel_sort.addEventListener('change', ChangeSort);
+        sel_count.addEventListener('change', ChangeCount);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+
+</body>
+</html>

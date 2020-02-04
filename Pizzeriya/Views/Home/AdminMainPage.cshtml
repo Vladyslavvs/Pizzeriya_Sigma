@@ -1,0 +1,176 @@
+﻿@using Pizzeriya.Models
+@model List<Pizzeriya.Models.Pizza>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админ панель</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/admin_main_page_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/admin_main_page_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <p class="number">+380995698546</p>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+        <div class="logined">
+            <a class="user_name" href="@Url.Action("Profile")">@ViewBag.UserName</a> /
+            <a class="log_out" href="@Url.Action("LoginOut")">Выйти</a>
+        </div>
+        <input type="hidden" value=@ViewBag.Id id="id_user" />
+    </div>
+    <button id="add_pizza">Добавить пиццу</button>
+    <div class="pizzas">
+        @if (@Model.Count != 0)
+        {
+            foreach (var pizza in @Model)
+            {
+                <div class="pizza">
+                    <p class="name">@pizza.Name</p>
+                    <p class="weight">@pizza.Weight грамм</p>
+                    <p class="cost">@pizza.Cost грн</p>
+                    @if (pizza.PizzaAvaible == "Avaible")
+                    {
+                        <p class="avaible">В наличии</p>
+                    }
+                    else
+                    {
+                        <p class="avaible">Нет в наличии</p>
+                    }
+                    <p class="ingr">@pizza.Composition</p>
+                    <a href="@Url.Action("RegPizza", new { IsNew = false,Id=@pizza.PizzaId })" class="reg">Редактировать</a>
+                    <a href="@Url.Action("DeletePizza",new { Id=pizza.PizzaId})" id="delPizza">Удалить</a>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Пицц пока нет</p>
+        }
+    </div>
+    <button id="add_action">Добавить акцию</button>
+    <div class="actions">
+        @if (@ViewBag.Actions.Count != 0)
+        {
+            foreach (var action in @ViewBag.Actions)
+            {
+                <div class="action">
+                    <p class="a_name">@action.Name</p>
+                    <p class="desc">@action.Description</p>
+                    <p class="begin">@action.DateBegin.ToString("dd.MM.yyyy")</p>
+                    <p class="razd">—</p>
+                    <p class="end">@action.DateEnd.ToString("dd.MM.yyyy")</p>
+                    @switch (@action.OnDay)
+                    {
+                        case "All":
+                            <p class="day">Все дни</p>
+                            break;
+                        case "Monday":
+                            <p class="day">Только понедельник</p>
+                            break;
+                        case "Tuesday":
+                            <p class="day">Только вторник</p>
+                            break;
+                        case "Wednesday":
+                            <p class="day">Только среда</p>
+                            break;
+                        case "Thursday":
+                            <p class="day">Только четверг</p>
+                            break;
+                        case "Friday":
+                            <p class="day">Только пятница</p>
+                            break;
+                        case "Saturday":
+                            <p class="day">Только суббота</p>
+                            break;
+                        case "Sunday":
+                            <p class="day">Только воскресенье</p>
+                            break;
+                    }
+                    <p class="buy">Пицца @action.PizzaName</p>
+                    <p class="count">Купить @action.PizzaCount</p>
+                    <p class="discount">@action.Discount%</p>
+
+                    <a href="@Url.Action("RegAction", new { IsNew = false,Id=@action.ShareId })" class="a_reg">Редактировать</a>
+                    <a href="@Url.Action("DeleteAction", new { Id=@action.ShareId})" id="delAction">Удалить</a>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Акций пока нет</p>
+        }
+
+    </div>
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+    <script>
+
+        AddPizza = () => {
+            document.location.href = '@Url.Action("RegPizza",new { IsNew=true})';
+        }
+
+        AddAction = () => {
+            document.location.href = '@Url.Action("RegAction",new { IsNew=true})';
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/admin_main_page_dark.css";
+                  $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });
+            }
+            else {
+                link.href = "/Styles/admin_main_page_light.css";
+                 $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });
+            }
+        }
+
+
+
+        var btnAddPizza = document.getElementById('add_pizza');
+        var btnAddAction = document.getElementById('add_action');
+
+
+        btnAddPizza.addEventListener('click', AddPizza);
+        btnAddAction.addEventListener('click', AddAction);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+
+</body>
+</html>

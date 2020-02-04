@@ -1,0 +1,117 @@
+﻿@model Pizzeriya.Models.Pizza
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать пиццу</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/reg_pizza_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/reg_pizza_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+    <label class="switch">
+        <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+        <span class="slider round"></span>
+    </label>
+    <div class="pizza">
+        <input type="hidden" value="@Model.PizzaId" id="id" />
+        <label for="name">Имя</label>
+        <input name="name" value="@Model.Name" />
+        <label for="weight">Вес</label>
+        <input name="weight" value="@Model.Weight" />
+        <label for="cost">Цена</label>
+        <input name="cost" value="@Model.Cost" />
+        <label class="avaible">Наличие</label>
+        <select class="avaible">
+            @if (@Model.PizzaAvaible == "Avaible")
+            {
+                <option selected value="Avaible">В наличии</option>
+                <option value="NotAvaible">Нет в наличии</option>
+            }
+            else
+            {
+                <option value="Avaible">В наличии</option>
+                <option value="NotAvaible" selected>Нет в наличии</option>
+            }
+        </select>
+        <label for="ingr">Инградиенты (через зяпятую)</label>
+        <input name="ingr" value="@Model.Composition" />
+        <button class="save">Сохранить</button>
+    </div>
+
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+
+    <script>
+
+        SavePizza = (e) => {
+            e.target.style.disabled = true;
+            let id = document.getElementById('id').value;
+            let name = document.getElementsByName('name')[0].value;
+            let ingr = document.getElementsByName('ingr')[0].value;
+            let cost = document.getElementsByName('cost')[0].value;
+            let weight = document.getElementsByName('weight')[0].value;
+            let avbl = document.getElementsByClassName('avaible')[1].value;
+            $.get('@Url.Action("RegPizzaResult")', {
+                Id: id, Name: name, Cost: cost, Weight: weight, Composition: ingr,  Avaible: avbl
+            }, function (data) {
+                if (data === 'ok') {
+                    document.location.href = '@Url.Action("AdminMainPage")';
+                }
+            }
+            );
+        }
+
+
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/reg_pizza_dark.css";
+                 $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/reg_pizza_light.css";
+                $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+        var save = document.getElementsByClassName('save')[0];
+        save.addEventListener('click', SavePizza);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+
+    </script>
+
+</body>
+</html>

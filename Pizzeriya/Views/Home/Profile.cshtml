@@ -1,0 +1,133 @@
+﻿    @model Pizzeriya.Models.User
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/profile_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/profile_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+        <p class="number">+380995698546</p>
+        <div class="logined">
+            <a class="user_name" href="@Url.Action("Profile")">@ViewBag.UserName</a> /
+            <a class="log_out" href="@Url.Action("LoginOut")">Выйти</a>
+        </div>
+    </div>
+
+    <h3>Укажите ваши данные для быстрого оформления заказа</h3>
+    <label for="name">Имя</label>
+    <input spellcheck="false" type="text" name="name" value=@Model.FirstName>
+    <label for="last_name">Фамилия</label>
+    <input spellcheck="false" type="text" name="last_name" value=@Model.LastName>
+    <label for="email">Email</label>
+    <input spellcheck="false" type="email" name="email" value=@Model.Email>
+    <label for="phone">Телефон</label>
+    <input spellcheck="false" type="text" name="phone" value=@Model.PhoneNumber>
+    <label for="streat">Улица</label>
+    <input spellcheck="false" type="text" name="streat" value=@Model.Streat>
+    <label for="house">Дом</label>
+    <input spellcheck="false" type="text" name="house" value=@Model.House>
+    <label for="padik">Подъезд</label>
+    <input spellcheck="false" type="text" name="padik" value=@Model.Padik>
+    <label for="flat">Квартира</label>
+    <input spellcheck="false" type="text" name="flat" value=@Model.Flat>
+
+    <input type="hidden" id="user_id" value="@ViewBag.Id" />
+    <label id="done">Готово</label>
+
+    <button class="save">Сохранить</button>
+
+    <label id="label_sum">Всего куплено пиццы на @Model.Sum грн</label>
+    <label id="label_discount">Ваша скидка @Model.Discount%</label>
+    @if (ViewBag.Data != "")
+    {
+        <label id="label_data_last">Последний заказ @ViewBag.Data</label>
+    }
+    else
+    {
+        <label id="label_data_last">Заказов еще не было</label>
+    }
+
+        <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+    <script>
+
+        Save = (e) => {
+            e.target.disabled = true;
+            let name = document.getElementsByName('name')[0].value;
+            let last_name = document.getElementsByName('last_name')[0].value;
+            let email = document.getElementsByName('email')[0].value;
+            let phone = document.getElementsByName('phone')[0].value;
+            let streat = document.getElementsByName('streat')[0].value;
+            let house = document.getElementsByName('house')[0].value;
+            let padik = document.getElementsByName('padik')[0].value;
+            let flat = document.getElementsByName('flat')[0].value;           
+            $.get('@Url.Action("ChangeUser", "Home")', {
+                Name: name, LastName: last_name, Email: email, Phone: phone,
+                Streat: streat, House: house, Padik: padik, Flat: flat
+            }, function (data) {
+                if (data === 'ok') {
+                    document.location.href = '@Url.Action("MainPage")';
+                }
+            });
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/profile_dark.css";
+                  $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/profile_light.css";
+                  $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+        var save = document.getElementsByClassName('save')[0];
+        save.addEventListener('click', Save);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Админ панель</title>
+	<link rel="stylesheet" type="text/css" href="operator_main.css">
+</head>
+<body>
+	<div class="orders">
+		<div class="order">
+			<input type="hidden" name="id" value="2">
+			<p class="id">Заказ: 1222</p>
+			<p class="name">Имя: Владислав</p>
+			<p class="last_name">Фамилия: Лазуткин</p>
+			<p class="date">Дата заказа: 28.01.2020 16:23</p>
+			<p class="view_pizzas">Список пиц</p>
+			<p class="sum">Сумма: 220 грн</p>
+			<p class="streat">Улица: Славянская</p>
+			<p class="house">Дом: 269</p>
+			<p class="padik">Подъезд: 2</p>
+			<p class="flat">Квартира: 23б</p>
+			<p class="oplata">Способ оплаты: Наличными</p>
+			<p class="email">Email: vlad232132@gmail.com</p>
+			<p class="phone">Телефон: +380996396543</p>
+			<label for="view">Просмотрено</label>
+			<input type="checkbox" name="view">
+			<label for="ready">Выполнено</label>
+			<input type="checkbox" name="ready">
+			<div class="pizzas">
+				<table>
+					<tr>
+						<th>1</th>
+						<th>Маргарита</th>
+						<th>2 шт</th>
+						<th>30 см</th>
+					</tr>
+					<tr>
+						<th>2</th>
+						<th>Маргарита</th>
+						<th>2 шт</th>
+						<th>30 см</th>
+					</tr>
+				</table>
+			</div>
+		</div>					
+	</div>
+	<select id="sort">
+		<option selected>По дате</option>
+		<option>Выполненные</option>
+		<option>Просмотренные</option>
+	</select>
+
+	<select id="count">
+		<option selected>Все</option>
+		<option>Последние 10</option>
+		<option>Последние 50</option>
+		<option>Последние 100</option>
+		<option>Последние 200</option>
+		<option>Последние 500</option>
+	</select>
+</body>
+</html>

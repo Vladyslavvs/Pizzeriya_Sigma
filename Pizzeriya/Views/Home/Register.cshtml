@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+    <link rel="stylesheet" type="text/css" href="~/Styles/register_light.css">
+    }
+    else
+    {
+    <link rel="stylesheet" type="text/css" href="~/Styles/register_dark.css">
+    }
+    
+</head>
+<body>
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+        <p class="number">+380995698546</p>
+        <div class="sign">
+            <a class="sign_up" href="@Url.Action("Login")">Войти</a> /
+            <a class="log_in" href="@Url.Action("Register")">Регистрация</a>
+        </div>
+    </div>
+
+    <h3>Регистрация</h3>
+    <label class="info">Укажите email и/или телефон для доступа к сайту</label>
+    <label for="email">Email</label>
+    <input spellcheck="false" type="email" name="email">
+    <label for="phone">Телефон</label>
+    <input spellcheck="false" type="text" name="phone">
+    <label for="pas">Пароль</label>
+    <input spellcheck="false" required type="password" name="pas">
+    <label for="pas_conf">Подтвердите пароль</label>
+    <input required spellcheck="false" type="password" name="pas_conf">
+    <button class="register" id="reg">Зарегистрироваться</button>
+    <label id="mes">Пользователь уже существует</label>
+
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+    <script>
+
+        HiddenMes = () => {
+            let mes = document.getElementById('mes');
+            mes.style.visibility = 'hidden';
+        }
+
+        ShowMes = (text,e) => {
+            let mes = document.getElementById('mes');
+            mes.innerHTML = text;
+            mes.style.visibility = 'visible';
+            if (timeout != undefined)
+                clearTimeout(timeout);
+            timeout = setTimeout(HiddenMes, 3000);
+            e.target.disabled = false;
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/register_dark.css";
+                  $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/register_light.css";
+                  $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+        Register = (e) => {
+            e.target.disabled = true;
+            let email = document.getElementsByName('email')[0].value;
+            let phone = document.getElementsByName('phone')[0].value;
+            let pas = document.getElementsByName('pas')[0].value;
+            let pas_conf = document.getElementsByName('pas_conf')[0].value;
+            if (email.trim() === '' && phone.trim() === '') {
+                ShowMes("Для регистрации нужен email и/или пароль",e);
+                return;
+            }
+            if (pas.trim() !== pas_conf.trim()) {
+                ShowMes("Пароли не совпадают",e);
+                return;
+            }
+            $.get("@Url.Action("RegisterUser")", { Email: email.trim(), Phone: phone.trim(), Pas: pas.trim() }, function (data) {
+                console.log(data);
+                if (data === 'user_error_email') {
+                    ShowMes("Пользователь с таким email уже зарегистрирован",e);
+                }
+                else if (data === 'user_error_phone') {
+                    ShowMes("Пользователь с таким телефоном уже зарегистрирован",e);
+                }
+                else if (data === 'ok') {
+                    document.location.href = "@Url.Action("MainPage")";
+                }
+            });
+        }
+        var timeout;
+
+        var but = document.getElementById('reg');
+        but.addEventListener('click', Register);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+
+</body>
+</html>

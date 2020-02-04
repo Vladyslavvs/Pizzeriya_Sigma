@@ -1,0 +1,303 @@
+﻿@model List<Pizzeriya.Models.PizzaInBasket>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Покупка</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/buy_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/buy_dark.css" rel="stylesheet">
+    }
+    <link rel="stylesheet" href="@Url.Content("~/Styles/bootstrap.min.css")" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body  style="@(theme=="dark"?"background:#090909; color:#D10606":"")">
+    
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+        <p class="number">+380995698546</p>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <input type="hidden" id="disc" value="@ViewBag.User.Discount" />
+            <div class="logined">
+                <a class="user_name" href="@Url.Action("Profile")">@ViewBag.User.FirstName</a> /
+                <a class="log_out" href="@Url.Action("LoginOut")">Выйти</a>
+            </div>
+        }
+        else
+        {
+            <input type="hidden" id="disc" value="0" />
+            <div class="sign">
+                <a class="sign_up" href="@Url.Action("Login")">Войти</a> /
+                <a class="log_in" href="@Url.Action("Register")">Регистрация</a>
+            </div>
+        }
+    </div>
+    <button class="back">Вернуться к покупкам</button>
+    <h3 class="order_label">Ваш заказ</h3>
+    <div class="table">
+        <table class="order_table">
+            <thead>
+                <tr>
+                    <th style="border-top:1px solid red;border-bottom:1px solid red;">Название</th>
+                    <th style="border-top:1px solid red;border-bottom:1px solid red;">Вес</th>
+                    <th style="border-top:1px solid red;border-bottom:1px solid red;">Диаметр</th>
+                    <th style="border-top:1px solid red;border-bottom:1px solid red;">Цена</th>
+                    <th style="border-top:1px solid red;border-bottom:1px solid red;">Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(@Model.Count==0)
+                {
+                    <script>
+                        document.location.href = '@Url.Action("MainPage")';
+                    </script>
+                }
+                @foreach (var pizza in @Model)
+                {
+                    <tr>
+                        <th style="border-top:1px solid red;border-bottom:1px solid red;">@pizza.Name</th>
+                        <th style="border-top:1px solid red;border-bottom:1px solid red;">@pizza.Weight грамм</th>
+                        <th style="border-top:1px solid red;border-bottom:1px solid red;">@pizza.Size см</th>
+                        <th style="border-top:1px solid red;border-bottom:1px solid red;">@pizza.Cost грн</th>
+                        <th style="border-top:1px solid red;border-bottom:1px solid red;">
+                            <button data-id="@pizza.Id" data-name="@pizza.Name" data-cost="@pizza.Cost"
+                                    data-weight="@pizza.Weight" data-size="@pizza.Size" class="min">
+                                -
+                            </button><span>@pizza.Count</span><button data-id="@pizza.Id" data-name="@pizza.Name" data-cost="@pizza.Cost"
+                                                                      data-weight="@pizza.Weight" data-size="@pizza.Size" class="plus">
+                                +
+                            </button>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <h3 class="order_summ">Итог : @ViewBag.Sum грн</h3>
+    <div id="actions">
+        @foreach (var discount in @ViewBag.Actions)
+        {
+            <h6 class="action">Скидка @discount%</h6>
+        }
+        @if (User.Identity.IsAuthenticated)
+        {
+            <h6 class="action">Скидка профиля @ViewBag.User.Discount%</h6>
+        }
+        <h6 class="action">Общая скидка @ViewBag.AllDiscounts%</h6>
+        @if (@ViewBag.Sum >500)
+        {
+            <h6 class="delivery">Бесплатная доставка</h6>
+        }
+        else
+        {
+            <h6 class="delivery">Доставка 50 грн</h6>
+        }
+        <input type="hidden" id="action" value="@ViewBag.AllDiscounts" />
+    </div>
+    <h3 class="main_summ">К оплате : @ViewBag.SumWithDiscounts грн</h3>
+    <div class="address">
+        <h3 class="order_info_delivery">Информация места доставки</h3>
+        <label for="streat">Улица*</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:10px;" name="streat" value="@ViewBag.User.Streat">
+        <br>
+        <label for="house" style=" position:relative;left:15px;top:30px;">Дом*</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:26px;top:30px" name="house" value="@ViewBag.User.House">
+        <label for="padik" style=" position:relative;left:45px; bottom:37px;">Подъезд</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:57px; bottom: 37px;" name="padik" value="@ViewBag.User.Padik">
+        <br>
+        <label for="flat" style=" position:relative;left:281px; bottom: 7px;">Квартира</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:293px; bottom: 7px;" name="flat" value="@ViewBag.User.Flat">
+    </div>
+
+    <div class="about_person">
+        <h3 class="order_about_person">Информация о заказчике</h3>
+        <label for="last_name" style=" position:relative;left:110px;">Фамилия*</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:120px;" name="last_name" value="@ViewBag.User.LastName">
+        <br>
+        <label for="name" style="position:relative;left:152px;top:32px;">Имя*</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:162px;top:32px;" name="name" value="@ViewBag.User.FirstName">
+
+        <label for="email" style=" position:relative;left:200px;bottom:38px;">Email</label>
+        <input spellcheck="false" type="text" style=" position:relative;left:212px;bottom:38px;" name="email" value="@ViewBag.User.Email">
+        <label for="phone" style=" position:relative;right:80px;top:32px;">Телефон*</label>
+        <input spellcheck="false" type="text" style=" position:relative;right: 70px;top:32px;" name="phone" value="@ViewBag.User.PhoneNumber">
+    </div>
+
+    <div class="oplata">
+        <h3>Выберите способ оплаты</h3>
+        <select class="method">
+            <option value="cash">Наличными при получении</option>
+            <option value="qiwi">QIWI</option>
+            <option value="contactless">Pay при получении</option>
+            <option value="card">VISA/Mastercard</option>
+        </select>
+    </div>
+
+    <div class="oplata_div">
+
+    </div>
+    <div class="add_order">
+        <h3 class="add_label">Пожелания</h3>
+        <textarea class="add"></textarea>
+    </div>
+
+
+    <button class="oform">Оформить</button>
+
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+    <script>
+
+        AddPizza = (e) => {
+            let id = e.target.getAttribute('data-id');
+            let name = e.target.getAttribute('data-name');
+            let cost = e.target.getAttribute('data-cost');
+            let weight = e.target.getAttribute('data-weight');
+            let size = e.target.getAttribute('data-size');
+
+            $.get('@Url.Action("BasketAdd", "Home")', { Id:id,Name:name,Cost:cost,Weight:weight,Size:size}, function (data) {
+                if (data !== 'error') {
+                    e.target.parentElement.getElementsByTagName('span')[0].innerHTML = parseInt(e.target.parentElement.getElementsByTagName('span')[0].innerHTML) + 1;
+                    document.getElementsByClassName('order_summ')[0].innerHTML = "Итог : " + data + " грн";
+                    let action = document.getElementById('action').value;
+                    let user_disc = document.getElementById('disc').value;
+                    let end_sum = Math.ceil(data * ((100 - action - user_disc) / 100.0));
+                    if (data < 500) {
+                        document.getElementsByClassName('delivery')[0].innerHTML = "Доставка 50 грн";
+                        end_sum += 50;
+                    }
+                    else {
+                        document.getElementsByClassName('delivery')[0].innerHTML = "Бесплатная доставка";
+                    }
+                    document.getElementsByClassName('main_summ')[0].innerHTML = "К оплате : " + end_sum + " грн";
+                   if (document.getElementsByClassName('order_table')[0].getElementsByTagName('tbody')[0].innerHTML.trim() === '') {
+                       document.location.href = '@Url.Action("MainPage")';
+                    }
+                }
+            });
+        }
+
+        MinPizza = (e) => {
+            let id = e.target.getAttribute('data-id');
+            let name = e.target.getAttribute('data-name');
+            let cost = e.target.getAttribute('data-cost');
+            let weight = e.target.getAttribute('data-weight');
+            let size = e.target.getAttribute('data-size');
+
+             $.get('@Url.Action("BasketRemove", "Home")', { Id: id, Name: name, Cost: cost, Weight: weight, Size: size }, function (data) {
+                if (data !== 'error') {
+                    if (parseInt(e.target.parentElement.getElementsByTagName('span')[0].innerHTML) > 1)
+                        e.target.parentElement.getElementsByTagName('span')[0].innerHTML = parseInt(e.target.parentElement.getElementsByTagName('span')[0].innerHTML) - 1;
+                    else
+                        e.target.parentElement.parentElement.remove();
+                    document.getElementsByClassName('order_summ')[0].innerHTML = "Итог : " + data + " грн";
+                    let action = document.getElementById('action').value;
+                    let user_disc = document.getElementById('disc').value;
+                    let end_sum = Math.ceil(data * ((100 - action - user_disc) / 100.0));
+                    if (data < 500) {
+                        document.getElementsByClassName('delivery')[0].innerHTML = "Доставка 50 грн";
+                        end_sum += 50;
+                    }
+                    else {
+                        document.getElementsByClassName('delivery')[0].innerHTML = "Бесплатная доставка";
+                    }
+                    document.getElementsByClassName('main_summ')[0].innerHTML = "К оплате : " + end_sum + " грн";
+                    if (document.getElementsByClassName('order_table')[0].getElementsByTagName('tbody')[0].innerHTML.trim() === '') {
+                        document.location.href = '@Url.Action("MainPage")';
+                    }
+                }
+            });
+        }
+
+        Back = () => {
+            document.location.href = '@Url.Action("MainPage")';
+        }
+
+        Oform = (e) => {
+            e.target.disabled = true;
+            let streat = document.getElementsByName('streat')[0].value;
+            let house = document.getElementsByName('house')[0].value;
+            let padik = document.getElementsByName('padik')[0].value;
+            let flat = document.getElementsByName('flat')[0].value;
+            let name = document.getElementsByName('name')[0].value;
+            let last_name = document.getElementsByName('last_name')[0].value;
+            let email = document.getElementsByName('email')[0].value;
+            let phone = document.getElementsByName('phone')[0].value;
+            let add = document.getElementsByClassName('add')[0].value;
+            let method = document.getElementsByClassName('method')[0].value;
+            $.get('@Url.Action("CreateOrder")', {
+                FirstName: name, LastName: last_name, Email: email, PhoneNumber: phone,
+                Streat: streat, House: house, Padik: padik, Flat: flat, Payment: method, Add: add
+            }, function (data) {
+                if (data === 'ok') {
+                    document.location.href = '@Url.Action("Done")';
+                    }
+                });
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/buy_dark.css";
+                document.body.style = "background:#090909; color:#D10606";
+                 $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/buy_light.css";
+                document.body.style = "";
+                $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+        var btn_back = document.getElementsByClassName('back')[0];
+        btn_back.addEventListener('click', Back);
+        var buttons_min = document.getElementsByClassName('min');
+        var buttons_add = document.getElementsByClassName('plus');
+        for (var i = 0; i < buttons_min.length; i++)
+            buttons_min[i].addEventListener('click', MinPizza);
+        for (var i = 0; i < buttons_add.length; i++)
+            buttons_add[i].addEventListener('click', AddPizza);
+
+        var btn_oform = document.getElementsByClassName('oform')[0];
+        btn_oform.addEventListener('click', Oform);
+
+
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+﻿body, html {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: white;
+    color: black;
+}
+
+.orders {
+    position:relative;
+    left:40px;
+    margin: 0 auto 0 auto;
+    height: 500px;
+    width: 80%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-top: 30px;
+}
+
+    .orders::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .orders::-webkit-scrollbar-track-piece {
+        background-color: white;
+    }
+
+    .orders::-webkit-scrollbar-thumb {
+        background-color: black;
+    }
+
+.order {
+    border: 1px solid black;
+    height: 150px;
+    margin-bottom: 15px;
+}
+
+.id {
+    margin-left: 10px;
+}
+
+.name {
+    position: relative;
+    bottom: 34px;
+    left: 190px;
+}
+
+.last_name {
+    position: relative;
+    bottom: 68px;
+    left: 390px;
+}
+
+.streat {
+    position: relative;
+    bottom: 180px;
+    left: 10px;
+}
+
+.house {
+    position: relative;
+    left: 10px;
+    bottom: 190px;
+}
+
+.padik {
+    position: relative;
+    left: 10px;
+    bottom: 200px;
+}
+
+.flat {
+    position: relative;
+    left: 10px;
+    bottom: 205px;
+}
+
+.date {
+    position: relative;
+    bottom: 106px;
+    left: 85%;
+}
+
+.oplata {
+    position: relative;
+    bottom: 315px;
+    left: 190px;
+}
+
+.email {
+    position: relative;
+    bottom: 327px;
+    left: 190px;
+}
+
+.view_pizzas {
+    position: relative;
+    bottom: 130px;
+    left: 840px;
+}
+
+.sum {
+    position: relative;
+    bottom: 98px;
+    left: 190px;
+}
+
+.phone {
+    position: relative;
+    bottom: 307px;
+    left: 190px;
+}
+
+label[for="view"] {
+    position: relative;
+    bottom: 380px;
+    float: right;
+    right: 40px;
+}
+
+label[for="ready"] {
+    position: relative;
+    bottom: 350px;
+    float: right;
+    left: 58px;
+}
+
+input[name="view"] {
+    position: relative;
+    bottom: 380px;
+    float: right;
+    left: 78px;
+}
+
+input[name="ready"] {
+    position: relative;
+    bottom: 350px;
+    float: right;
+    left: 176px;
+}
+
+.pizzas {
+    position: relative;
+    bottom: 415px;
+    left: 730px;
+    border: 1px solid black;
+    height: 85px;
+    width: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+    .pizzas::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .pizzas::-webkit-scrollbar-track-piece {
+        background-color: white;
+    }
+
+    .pizzas::-webkit-scrollbar-thumb {
+        background-color: black;
+    }
+
+select {
+    background-color: #090909;
+    border: 1px solid black;
+    color: red;
+}
+
+#sort {
+    position: fixed;
+    top: 30px;
+    left: 20px;
+    background-color:white;
+    color:black;
+}
+
+#count {
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    background-color: white;
+    color: black;
+}
+
+.switch {
+    top: 100px;
+    left: 90px;
+    position: absolute;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+
+input:checked + .slider {
+    background-color: black;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }

@@ -1,0 +1,41 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Done</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/done_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/done_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+    <div> 
+        <p>Спасибо за покупку, наш оператор сообщит о статусе заказа в течение 5 мин</p>
+        <a href='@Url.Action("MainPage","Home")'>На главную</a>
+    </div>
+</body>
+</html>

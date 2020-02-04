@@ -1,0 +1,211 @@
+﻿body, html {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: white;
+    color: black;
+}
+
+
+button {
+    width: 120px;
+    background-color: white;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+}
+
+    button:hover {
+        color: white;
+        background-color: black;
+    }
+
+    button:focus {
+        outline: none !important
+    }
+
+input {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    text-align: center;
+}
+
+
+select {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    position: absolute;
+    top: 450px;
+    left: 207px;
+}
+
+
+label[for="name"] {
+    position: absolute;
+    top: 50px;
+    left: 70px;
+}
+
+input[name="name"] {
+    position: absolute;
+    top: 50px;
+    left: 160px;
+    width: 300px;
+}
+
+label[for="desc"] {
+    position: absolute;
+    top: 100px;
+    left: 70px;
+}
+
+input[name="desc"] {
+    position: absolute;
+    top: 100px;
+    left: 160px;
+    width: 400px;
+}
+
+label[for="pizza"] {
+    position: absolute;
+    top: 150px;
+    left: 70px;
+}
+
+.pizza {
+    position: absolute;
+    top: 150px;
+    left: 270px;
+}
+
+label[for="count"] {
+    position: absolute;
+    top: 200px;
+    left: 70px;
+}
+
+input[name="count"] {
+    position: absolute;
+    top: 200px;
+    left: 270px;
+}
+
+label[for="day"] {
+    position: absolute;
+    top: 250px;
+    left: 70px;
+}
+
+.day {
+    position: absolute;
+    top: 250px;
+    left: 270px;
+}
+
+label[for="date_begin"] {
+    position: absolute;
+    top: 300px;
+    left: 70px;
+}
+
+input[name="date_begin"] {
+    position: absolute;
+    top: 300px;
+    left: 270px;
+}
+
+label[for="date_end"] {
+    position: absolute;
+    top: 350px;
+    left: 70px;
+}
+
+input[name="date_end"] {
+    position: absolute;
+    top: 350px;
+    left: 270px;
+}
+
+label[for="discount"] {
+    position: absolute;
+    top: 400px;
+    left: 70px;
+}
+
+input[name="discount"] {
+    position: absolute;
+    top: 400px;
+    left: 270px;
+}
+
+.save {
+    position: absolute;
+    top: 450px;
+    left: 70px;
+}
+
+.switch {
+    top: 10px;
+    left: 150px;
+    position: absolute;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+
+input:checked + .slider {
+    background-color: black;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }

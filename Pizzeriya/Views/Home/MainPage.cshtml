@@ -1,0 +1,589 @@
+﻿@model  ICollection<Pizzeriya.Models.Pizza>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+
+    @if (theme == "light")
+    {
+        <link href="~/Styles/style_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/style_dark.css" rel="stylesheet">
+    }
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body style="@(theme=="dark"?"background:#090909; color:#D10606":"")">
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <p class="number">+380995698546</p>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+
+        @switch (ViewBag.Role)
+        {
+            case 2:
+                <a href="@Url.Action("AdminMainPage")" class="admin_page">Admin панель</a>
+                break;
+            case 3:
+                <a href="@Url.Action("OperatorMain")" class="oper_page">Operator панель</a>
+                break;
+            default:
+                break;
+        }
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="logined">
+                <a class="user_name" href="@Url.Action("Profile")">@ViewBag.UserName</a> /
+                <a class="log_out" href="@Url.Action("LoginOut")">Выйти</a>
+            </div>
+            <input type="hidden" value=@ViewBag.Id id="id_user" />
+        }
+        else
+        {
+            <div class="sign">
+                <a class="sign_up" href="@Url.Action("Login")">Войти</a> /
+                <a class="log_in" href="@Url.Action("Register")">Регистрация</a>
+            </div>
+        }
+    </div>
+
+    <div class="container">
+        <div class="menu">
+            <p>Сортировка по</p>
+            <input type="hidden" id="sort" value="name" />
+            <div>
+                <input type="radio" checked name="sort" value="name">
+                <p>Имени</p>
+            </div>
+            <div>
+                <input type="radio" name="sort" value="popul">
+                <p>Популярности</p>
+            </div>
+            <div>
+                <input type="radio" name="sort" value="cost">
+                <p>Цене</p>
+            </div>
+            <div>
+                <input type="radio" name="sort" value="weight">
+                <p>Весу</p>
+            </div>
+            <div>
+                <input type="radio" name="sort" value="action">
+                <p>Акции</p>
+            </div>
+            <div class="avaible">
+                <input type="hidden" id="avaibl" value="all" />
+                <p style="top:-8px; left: -10px;">Наличию:</p>
+                <input type="radio" checked name="avaibl" value="all">
+                <p>Все</p>
+                <input type="radio" name="avaibl" value="avaible">
+                <p>В наличии</p>
+                <input type="radio" name="avaibl" value="notavaible">
+                <p>Нет в наличии</p>
+            </div>
+            <div class="ingradients">
+                <p style="position: relative; top :-15px; left: -10px;">Инградиентам:</p>
+                @foreach (var ingr in ViewBag.Ingr)
+                {
+                    <input type="checkbox" checked name="ingr" value=@ingr>
+                    <p>@ingr</p>
+                }
+            </div>
+        </div>
+        @foreach (var share in ViewBag.Shares)
+        {
+            <div class="action">
+                <p class="action_name">@share.Name</p>
+                <p class="action_desc">@share.Description</p>
+            </div>
+        }
+        <div class="all-pizza">
+            @foreach (var pizza in @Model)
+            {
+                <div class="pizza">
+                    <img src="@pizza.Url" alt="pizza">
+                    <p id="pizza-name">@pizza.Name</p>
+                    <p class="comp">@pizza.Composition</p>
+                    <div class="size">
+                        <div>
+                            <input type="radio" name="size-@pizza.PizzaId" checked value="30">
+                            <p>30см</p>
+                        </div>
+                        <div>
+                            <input style="position: relative; bottom: 10px;" type="radio" name="size-@pizza.PizzaId" value="45">
+                            <p style="position: relative; bottom: 5px;">45см</p>
+                        </div>
+                        <div>
+                            <input type="radio" name="size-@pizza.PizzaId" value="60">
+                            <p>60см</p>
+                        </div>
+                    </div>
+                    <div class="cost">
+                        <p class="pizza-cost" style="float: left;">@pizza.Cost грн</p>
+                        <p class="pizza-weight" style="float: right;bottom: 4px;position: relative;">@pizza.Weight грамм</p>
+                        @if (pizza.PizzaAvaible == "Avaible")
+                        {
+                            <button class="buy" data-id=@pizza.PizzaId data-name=@pizza.Name
+                                    data-weight=@pizza.Weight data-cost=@pizza.Cost>
+                                Купить
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="not_avaible" disabled="disabled">
+                                Недоступна
+                            </button>
+                        }
+                    </div>
+                        @if (@pizza.Share == "Share")
+                        {
+                            <p class="action_pizza">Акция!</p>
+                        }
+                </div>
+            }
+        </div>
+        <div class="basket">
+            <input type="hidden" value="@ViewBag.Basket.Sum" id="total" />
+            <p>Корзина</p>
+            @if (@ViewBag.Basket.pizzaInBaskets.Count != 0)
+            {
+                <p id="empty" style="display:none;">Корзина пуста</p>
+                <p class="bas-total" style="display:block;">Всего @ViewBag.Basket.Sum грн</p>
+                <button class="oform" style="display:inline;">Оформить</button>
+            }
+            else
+            {
+                <p id="empty" style="display:block;">Корзина пуста</p>
+                <p class="bas-total" style="display:none;">Всего @ViewBag.Basket.Sum грн</p>
+                <button class="oform" style="display:none;">Оформить</button>
+            }
+
+            @foreach (var p in @ViewBag.Basket.pizzaInBaskets)
+            {
+                <div class="pizza-in-basket">
+                    <p class="bas-name">@p.Name</p>
+                    <p class="bas-cost">Цена : @p.Cost грн</p>
+                    <p class="bas-diametr">@p.Size см</p>
+                    <p class="bas-weight">@p.Weight грамм</p>
+                    <button data-id="@p.Id" data-name="@p.Name" data-cost="@p.Cost"
+                            data-weight="@p.Weight" data-size="@p.Size" class="btn-remove-bas">
+                        X
+                    </button>
+                    <p class="pizza-count">@p.Count</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+    <script>
+
+        GoToBuy = () => {
+            document.location.href="@Url.Action("Buy")";
+        }
+
+        OnItemRemove = (e) => {
+            let id = e.target.getAttribute('data-id');
+            let name = e.target.getAttribute('data-name');
+            let cost = e.target.getAttribute('data-cost');
+            let weight = e.target.getAttribute('data-weight');
+            let size = e.target.getAttribute('data-size');
+
+            $.get('@Url.Action("BasketRemove", "Home")', { Id: id, Name: name, Cost: cost, Weight: weight, Size: size }, function (data) {
+                if (data !== 'error') {
+                    let pizzas_in_basket = document.getElementsByClassName('pizza-in-basket');
+                    for (let i = 0; i < pizzas_in_basket.length; i++) {
+                        let btn = pizzas_in_basket[i].getElementsByClassName('btn-remove-bas')[0];
+                        if (btn.getAttribute('data-name') == name &&
+                            btn.getAttribute('data-cost') == cost &&
+                            btn.getAttribute('data-weight') == weight &&
+                            btn.getAttribute('data-size') == size &&
+                            btn.getAttribute('data-id') == id) {
+                            let cnt = pizzas_in_basket[i].getElementsByClassName('pizza-count')[0];
+                            if (parseInt(cnt.innerHTML) > 1) {
+                                cnt.innerHTML = parseInt(cnt.innerHTML) - 1;
+                            }
+                            else {
+                                if (document.getElementsByClassName('pizza-in-basket').length == 1) {
+                                    document.getElementById('empty').style.display = 'block';
+                                    document.getElementsByClassName('bas-total')[0].style.display = 'none';
+                                    document.getElementsByClassName('oform')[0].style.display = 'none';
+                                }
+                                e.target.parentElement.remove();
+                            }
+                            break;
+                        }
+                    }
+                    document.getElementsByClassName('bas-total')[0].innerHTML = "Всего " + data + " грн";
+                    document.getElementById('total').value = data;
+                }
+            });
+        }
+
+        OnPizzaBuy = (e) => {
+            let basket = document.getElementsByClassName('basket');
+            let id = e.target.getAttribute('data-id');
+            let name = e.target.getAttribute('data-name');
+            let cost = e.target.getAttribute('data-cost');
+            let weight = e.target.getAttribute('data-weight');
+            let size = 30;
+            let inputes = e.target.parentElement.parentElement.getElementsByTagName('input');
+            for (let i = 0; i < inputes.length; i++) {
+                if (inputes[i].checked) {
+                    size = inputes[i].value;
+                    break;
+                }
+            }
+            switch (size) {
+                case '45':
+                    cost = Math.ceil(cost * 1.4);
+                    weight = Math.ceil(weight*1.5);
+                    break;
+                case '60':
+                    cost = Math.ceil(cost * 1.9);
+                    weight = Math.ceil(weight * 2);
+                    break;
+            }
+
+            let pizza = {
+                Id: id,
+                Name: name,
+                Cost: cost,
+                Weight: weight,
+                Size: size
+            }
+
+            $.get('@Url.Action("BasketAdd", "Home")', { Id:id,Name:name,Cost:cost,Weight:weight,Size:size}, function (data) {
+                if (data !== 'error') {
+                    document.getElementById('empty').style.display = 'none';
+                    document.getElementsByClassName('bas-total')[0].style.display = 'block';
+                    document.getElementsByClassName('oform')[0].style.display = 'inline';
+                    let pizzas_in_basket = document.getElementsByClassName('pizza-in-basket');
+                    for (let i = 0; i < pizzas_in_basket.length; i++) {        
+                        let btn = pizzas_in_basket[i].getElementsByClassName('btn-remove-bas')[0];
+                        if (btn.getAttribute('data-name') == name &&
+                            btn.getAttribute('data-cost') == cost &&
+                            btn.getAttribute('data-weight') == weight &&
+                            btn.getAttribute('data-size') == size &&
+                            btn.getAttribute('data-id') == id) {
+                            let cnt = pizzas_in_basket[i].getElementsByClassName('pizza-count')[0];
+                            cnt.innerHTML = parseInt(cnt.innerHTML) + 1;
+                            document.getElementsByClassName('bas-total')[0].innerHTML = "Всего " + data + " грн";
+                                document.getElementById('total').value = data;
+                                
+                            return;
+                        }
+                    }
+                    let div = document.createElement('div');
+                    div.className = 'pizza-in-basket';
+                    let pName = document.createElement('p');
+                    let pCost = document.createElement('p');
+                    let pSize = document.createElement('p');
+                    let pWeight = document.createElement('p');
+                    let pCount = document.createElement('p');
+                    pCount.type = "hidden";
+                    pCount.innerHTML = 1;
+                    pCount.className= "pizza-count";
+                    pName.className = 'bas-name';
+                    pWeight.className = 'bas-weight';
+                    pCost.className = 'bas-cost';
+                     pSize.className = 'bas-diametr';
+                     pName.innerHTML = pizza.Name;
+                     pCost.innerHTML = 'Цена : ' + pizza.Cost + ' грн';
+                     pSize.innerHTML = pizza.Size + ' см';
+                     pWeight.innerHTML = pizza.Weight + ' грамм';
+                     let btn = document.createElement('button');
+                     btn.setAttribute('data-id', pizza.Id);
+                     btn.setAttribute('data-name', pizza.Name);
+                     btn.setAttribute('data-cost', pizza.Cost);
+                     btn.setAttribute('data-weight', pizza.Weight);
+                     btn.setAttribute('data-size', pizza.Size);
+                    btn.className = 'btn-remove-bas';
+                    btn.innerHTML = "X";
+                    btn.addEventListener('click', OnItemRemove);
+                    div.append(pName);
+                    div.append(pCost);
+                    div.append(pSize);
+                    div.append(pWeight);
+                    div.append(btn);
+                    div.append(pCount);
+                     basket[0].append(div);
+                    document.getElementsByClassName('bas-total')[0].innerHTML = "Всего " + data + " грн";
+                    document.getElementById('total').value = data;
+                }
+            });
+        }
+
+        OnRadioChanged = (e) => {
+            let beginCost = e.target.parentElement.parentElement.parentElement.getElementsByClassName('buy')[0].getAttribute('data-cost');
+            let beginWeight = e.target.parentElement.parentElement.parentElement.getElementsByClassName('buy')[0].getAttribute('data-weight');
+            let cost;
+            let weight;
+            switch (e.target.value) {
+                case '30':
+                    cost = beginCost;
+                    weight = beginWeight;
+                    break;
+                case '45':
+                    cost = Math.ceil(beginCost*1.4);
+                    weight = Math.ceil(beginWeight*1.5);
+                    break;
+                case '60':
+                    cost = Math.ceil(beginCost*1.9);
+                    weight = Math.ceil(beginWeight*2);
+                    break;
+            }
+            e.target.parentElement.parentElement.parentElement.getElementsByClassName('pizza-weight')[0].innerHTML = weight +' грамм';
+            e.target.parentElement.parentElement.parentElement.getElementsByClassName('pizza-cost')[0].innerHTML = cost+' грн';
+        }
+
+        CreatePizza = (data) => {
+                let pizza = document.createElement('div');
+                pizza.className = 'pizza';
+                let img = document.createElement('img');
+                img.src = data.Url;
+                img.alt = 'pizza';
+                let pName = document.createElement('p');
+                pName.id = 'pizza-name';
+                pName.innerHTML = data.Name;
+                let pComp = document.createElement('p');
+                pComp.className = "comp";
+                pComp.innerHTML = data.Composition;               
+                let size = document.createElement('div');
+                size.className = 'size';
+                let div1 = document.createElement('div');
+                let inp1 = document.createElement('input');
+                inp1.type = 'radio';
+                inp1.name = 'size-' + data.PizzaId;
+                inp1.checked = true;
+                inp1.value = 30;
+                let p1 = document.createElement('p');
+                p1.innerHTML = '30см';
+                div1.append(inp1);
+                div1.append(p1);
+                let div2 = document.createElement('div');
+                let inp2 = document.createElement('input');
+                inp2.type = 'radio';
+                inp2.name = 'size-' + data.PizzaId;
+                inp2.value = 45;
+                inp2.style.cssText = "position: relative; bottom: 10px;";
+                let p2 = document.createElement('p');
+                p2.innerHTML = '45см';
+                p2.style.cssText = "position: relative; bottom: 5px";
+                div2.append(inp2);
+                div2.append(p2);
+                let div3 = document.createElement('div');
+                let inp3 = document.createElement('input');
+                inp3.type = 'radio';
+                inp3.name = 'size-' + data.PizzaId;
+                inp3.value = 60;
+                let p3 = document.createElement('p');
+                p3.innerHTML = '60см';
+                div3.append(inp3);
+                div3.append(p3);
+                size.append(div1);
+                size.append(div2);
+                size.append(div3);
+                let cost = document.createElement('div');
+                cost.className = 'cost';
+                let pCost = document.createElement('p');
+                pCost.className = 'pizza-cost';
+                pCost.style.cssText = "float: left;";
+                pCost.innerHTML = data.Cost + ' грн';
+                let pW = document.createElement('p');
+                pW.className = 'pizza-weight';
+                pW.style.cssText = "float: right;bottom: 4px;position: relative;";
+                pW.innerHTML = data.Weight + ' грамм';
+
+                let but = document.createElement('button');
+                if (data.PizzaAvaible == "Avaible") {
+                    but.className = 'buy';
+                    but.setAttribute('data-id', data.PizzaId);
+                    but.setAttribute('data-name', data.Name);
+                    but.setAttribute('data-weight', data.Weight);
+                    but.setAttribute('data-cost', data.Cost);
+                    but.innerHTML = 'Купить';
+                    but.addEventListener('click', OnPizzaBuy);
+                }
+                else {
+                    but.className = 'not_avaible';
+                    but.style.disabled = "disabled";
+                    but.innerHTML = "Недоступна";
+                } 
+                
+                cost.append(pCost);
+                cost.append(pW);
+                    cost.append(but);
+                    pizza.append(img);
+                    pizza.append(pName);
+                    pizza.append(pComp);
+                pizza.append(size);
+                pizza.append(cost);
+                if (data.Share == "Share") {
+                    let p = document.createElement('p');
+                    p.className = "action_pizza";
+                    p.innerHTML = "Акция!";
+                    pizza.append(p);
+                }           
+                return pizza;
+        }
+                 
+        OnSortChanged = (e) => {
+            let cur = document.getElementById('sort');
+            if (cur.value != e.target.value) {
+                cur.value = e.target.value;
+                let load = document.createElement('p');
+                load.className = "load";
+                load.innerHTML = "Загрузка";
+                document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+                document.getElementsByClassName('all-pizza')[0].append(load);
+                $.get('@Url.Action("GetPizza", "Home")', { SortBy: "sort", By: e.target.value }, function (data) {
+                    if (data !== 'error') {
+                        document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+                        for (let i = 0; i < data.length; i++) {
+                            let pizza = CreatePizza(data[i]);
+                            document.getElementsByClassName('all-pizza')[0].append(pizza);
+                        }
+                        var pizzas = document.getElementsByClassName('size');
+                        for (let i = 0; i < pizzas.length; i++)
+                            for (let j = 0; j < pizzas[i].getElementsByTagName('input').length; j++)
+                                pizzas[i].getElementsByTagName('input')[j].addEventListener('change', OnRadioChanged);
+                    }                  
+                });
+            }          
+        }
+
+        OnIngradientsChanged = (e) => {
+                let notAllowed = [];
+                let inputs = e.target.parentElement.getElementsByTagName('input');;
+                for (let i = 0; i < inputs.length; i++)
+                    if (!inputs[i].checked)
+                        notAllowed.push(inputs[i].value);
+            notAllowed = notAllowed.length == 0 ? ["all"] : notAllowed;
+            let load = document.createElement('p');
+            load.className = "load";
+            load.innerHTML = "Загрузка";
+            document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+            document.getElementsByClassName('all-pizza')[0].append(load);
+                $.get('@Url.Action("GetPizzaIngradients", "Home")', { notAllowedIngradients: notAllowed.join(',') }, function (data) {
+                    if (data !== 'no pizza') {
+                        document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+                        for (let i = 0; i < data.length; i++) {
+                            let pizza = CreatePizza(data[i]);
+                            document.getElementsByClassName('all-pizza')[0].append(pizza);
+                        }
+                        var pizzas = document.getElementsByClassName('size');
+                        for (let i = 0; i < pizzas.length; i++)
+                            for (let j = 0; j < pizzas[i].getElementsByTagName('input').length; j++)
+                                pizzas[i].getElementsByTagName('input')[j].addEventListener('change', OnRadioChanged);
+                    }
+                    else {
+                        document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+                        let p = document.createElement('p');
+                        p.className = "no_pizza";
+                        p.innerHTML = "Такой пиццы нет";
+                        document.getElementsByClassName('all-pizza')[0].append(p);
+                    }
+                });
+        }
+       
+        OnAvaibleChanged = (e) => {
+            let cur = document.getElementById('avaibl');
+            if (cur.value != e.target.value) {
+                cur.value = e.target.value;
+                $.get('@Url.Action("GetPizza", "Home")', { SortBy: "avaibl", By: e.target.value }, function (data) {
+                    if (data !== 'error') {
+                        document.getElementsByClassName('all-pizza')[0].innerHTML = '';
+                        for (let i = 0; i < data.length; i++) {
+                            let pizza = CreatePizza(data[i]);
+                            document.getElementsByClassName('all-pizza')[0].append(pizza);
+                        }
+                        var pizzas = document.getElementsByClassName('size');
+                        for (let i = 0; i < pizzas.length; i++)
+                            for (let j = 0; j < pizzas[i].getElementsByTagName('input').length; j++)
+                                pizzas[i].getElementsByTagName('input')[j].addEventListener('change', OnRadioChanged);
+                    }
+                });
+            }    
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/style_dark.css";
+                document.body.style = "background:#090909; color:#D10606";
+                $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });              
+            }
+            else {
+                link.href = "/Styles/style_light.css";
+                document.body.style = "";
+                 $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+        var button_oform = document.getElementsByClassName('oform')[0];
+        button_oform.addEventListener('click', GoToBuy);
+
+        var buttons = document.getElementsByClassName('buy');
+        for (var i = 0; i < buttons.length; i++)
+            buttons[i].addEventListener('click', OnPizzaBuy);
+
+        var buttons_rem = document.getElementsByClassName('btn-remove-bas');
+        for (var i = 0; i < buttons_rem.length; i++)
+            buttons_rem[i].addEventListener('click', OnItemRemove);
+
+        var pizzas = document.getElementsByClassName('size');
+        for (let i = 0; i < pizzas.length; i++)
+            for (let j = 0; j < pizzas[i].getElementsByTagName('input').length; j++)
+                pizzas[i].getElementsByTagName('input')[j].addEventListener('change', OnRadioChanged);
+
+        var menu = document.getElementsByClassName('menu')[0];
+
+        for (let i = 0; i < menu.getElementsByTagName('input').length; i++) {
+            if (menu.getElementsByTagName('input')[i].name == 'sort')
+                menu.getElementsByTagName('input')[i].addEventListener('change', OnSortChanged);
+            else if (menu.getElementsByTagName('input')[i].name == 'avaibl')
+                menu.getElementsByTagName('input')[i].addEventListener('change', OnAvaibleChanged);
+            else if (menu.getElementsByTagName('input')[i].name == 'ingr')
+                menu.getElementsByTagName('input')[i].addEventListener('change', OnIngradientsChanged);
+        }
+
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+
+    </script>
+</body>
+
+</html>

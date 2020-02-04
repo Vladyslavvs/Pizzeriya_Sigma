@@ -1,0 +1,143 @@
+﻿@model Pizzeriya.Models.Share
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать акцию</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/reg_action_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/reg_action_dark.css" rel="stylesheet">
+    }
+ 
+</head>
+<body>
+    <label class="switch">
+        <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+        <span class="slider round"></span>
+    </label>
+    <div class="pizza">
+        <input type="hidden" id="id" value="@ViewBag.NextId" />
+        <label for="name">Имя</label>
+        <input name="name" value="@Model.Name" />
+        <label for="desc">Описание</label>
+        <input name="desc" value="@Model.Description" />
+        <label for="pizza">Выбрать пиццу</label>
+        <select class="pizza">
+            @foreach (var pizza in ViewBag.Pizzas)
+            {
+                if (@pizza.PizzaId == @Model.PizzaId)
+                {
+                    <option selected value="@pizza.PizzaId">@pizza.Name</option>
+                }
+                else
+                {
+                    <option value="@pizza.PizzaId">@pizza.Name</option>
+                }
+            }
+        </select>
+        <label for="count">Выбрать количество пицц</label>
+        <input name="count" value="@Model.PizzaCount" />
+        <label for="day">Выбрать день действия</label>
+        <select class="day">
+            @{
+                var days = new string[] { "All", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                var days_rus = new string[] { "Все", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
+            }
+            @for (int i = 0; i < 8; i++)
+            {
+                if (@Model.OnDay == @days[i])
+                {
+                    <option selected value="@days[i]">@days_rus[i]</option>
+                }
+                else
+                {
+                    <option value="@days[i]">@days_rus[i]</option>
+                }
+            }
+        </select>
+        <label for="date_begin">Выбрать дату начала</label>
+        <input type="date" name="date_begin" value="@Model.DateBegin" />
+        <label for="date_end">Выбрать дату конца</label>
+        <input type="date" name="date_end" value="@Model.DateEnd" />
+        <label for="discount">Выбрать скидку</label>
+        <input name="discount" min=1 max=60 value="@Model.Discount" />
+        <button class="save">Сохранить</button>
+    </div>
+
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+
+    <script>
+
+        SaveAction = (e) => {
+            e.target.disabled = true;
+            let id = document.getElementById('id').value;
+            console.log(id);
+            let name = document.getElementsByName('name')[0].value;
+            let desc = document.getElementsByName('desc')[0].value;
+            let pizza = document.getElementsByClassName('pizza')[1].value;
+            let count = document.getElementsByName('count')[0].value;
+            let day = document.getElementsByClassName('day')[0].value;
+            let date_begin = document.getElementsByName('date_begin')[0].value;
+            let date_end = document.getElementsByName('date_end')[0].value;
+            let discount = document.getElementsByName('discount')[0].value;
+            $.get('@Url.Action("RegActionResult")', {
+                Id: id, Name: name, DateBegin: date_begin,
+                DateEnd: date_end, OnDay: day, Description: desc, Count: count, PizzaId: pizza, Discount: discount
+            }, function (data) {
+                if (data === 'ok') {
+                    document.location.href = '@Url.Action("AdminMainPage")';
+                }
+            }
+            );
+        }
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/reg_action_dark.css";
+                 $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/reg_action_light.css";
+                 $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+
+
+        var save = document.getElementsByClassName('save')[0];
+        save.addEventListener('click', SaveAction);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+</body>
+</html>

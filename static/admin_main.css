@@ -1,0 +1,162 @@
+body,html{
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	background-color: #090909;
+	color:#D10606;
+}
+
+.pizzas{
+	height: 500px;
+	width: 505px;
+	float:left;
+	margin-left: 50px;
+	margin-top: 50px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.pizzas::-webkit-scrollbar { width: 3px;}
+.pizzas::-webkit-scrollbar-track-piece { background-color: #090909;}
+.pizzas::-webkit-scrollbar-thumb { background-color: #D10606;}
+
+.actions{
+	height: 500px;
+	width: 505px;
+	float: right;
+	margin-right: 50px;
+	margin-top: 50px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.actions::-webkit-scrollbar { width: 3px;}
+.actions::-webkit-scrollbar-track-piece { background-color: #090909;}
+.actions::-webkit-scrollbar-thumb { background-color: #D10606;}
+
+.pizza{
+	width: 500px;
+	border:1px solid #D10606;
+	height: 50px;
+	white-space: nowrap;
+	margin-bottom: 5px;
+}
+
+.name{
+	position: relative;
+	bottom: 10px;
+	left:5px;
+}
+
+.weight{
+	position: relative;
+	bottom: 43px;
+	left:100px;
+}
+
+.cost{
+	position: relative;
+	bottom: 77px;
+	left:190px;
+}
+
+.avaible{
+	position: relative;
+	bottom: 111px;
+	left:270px;
+}
+
+.ingr{
+	position: relative;
+	bottom: 125px;
+	left:5px;
+	overflow: hidden;
+}
+
+.reg{
+	position: relative;
+	bottom: 180px;
+	left:395px;
+	text-decoration: none;
+	height:20px;
+}
+
+.reg:hover{
+	color:#D10606;
+}
+
+.action{
+	width: 500px;
+	border:1px solid #D10606;
+	height: 80px;
+	white-space: nowrap;
+	margin-bottom: 5px;
+}
+
+.a_name{
+	position: relative;
+	bottom: 10px;
+	left:5px;
+	overflow: hidden;
+	max-width: 275px;
+}
+
+.desc{
+	position: relative;
+	bottom: 20px;
+	left:5px;
+	overflow: hidden;
+}
+
+.begin{
+	position: relative;
+	bottom: 78px;
+	left:320px;
+}
+
+.end{
+	position: relative;
+	bottom: 146px;
+	left:422px;
+}
+
+.razd{
+	position: relative;
+	bottom: 113px;
+	left:399px;
+}
+
+.day{
+	position: relative;
+	bottom: 130px;
+	left:5px;
+}
+
+.buy{
+	position: relative;
+	bottom: 163px;
+	left:80px;
+}	
+
+.count{
+	position: relative;
+	bottom: 197px;
+	left:220px;
+}
+
+.discount{
+	position: relative;
+	bottom: 231px;
+	left:320px;
+}
+
+.a_reg{
+	text-decoration: none;
+	position: relative;
+	height:20px;
+	bottom: 265px;
+	left:395px;
+}
+
+.a_reg:hover{
+	color:#D10606;
+}

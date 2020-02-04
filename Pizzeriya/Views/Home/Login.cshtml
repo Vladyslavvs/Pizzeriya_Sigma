@@ -1,0 +1,115 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Войти</title>
+    @{
+        var theme = "light";
+        if (Request.Cookies["theme"] == null)
+        {
+            theme = "light";
+        }
+        else
+        {
+            if (Request.Cookies["theme"].Value == "dark")
+            {
+                theme = "dark";
+            }
+            if (Request.Cookies["theme"].Value == "light")
+            {
+                theme = "light";
+            }
+        }
+    }
+    @if (theme == "light")
+    {
+        <link href="~/Styles/login_light.css" rel="stylesheet">
+    }
+    else
+    {
+        <link href="~/Styles/login_dark.css" rel="stylesheet">
+    }
+</head>
+<body>
+    <div class="nav">
+        <label class="switch">
+            <input type="checkbox" @(theme == "dark" ? "checked" : "") />
+            <span class="slider round"></span>
+        </label>
+        <a href="@Url.Action("MainPage")" class="main_pizza">Главная страница</a>
+        <p class="number">+380995698546</p>
+        <div class="sign">
+            <a class="sign_up" href="@Url.Action("Login")">Войти</a> /
+            <a class="log_in" href="@Url.Action("Register")">Регистрация</a>
+        </div>
+    </div>
+
+    <h3>Вход на сайт</h3>
+    <label for="name">Телефон или Email</label>
+    <input spellcheck="false" required type="text" name="em_ph">
+    <label for="last_name">Пароль</label>
+    <input spellcheck="false" type="password" required name="pas">
+
+    <button class="login">Войти</button>
+    <label id="mes"></label>
+
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
+
+    <script>
+        HiddenMes = () => {
+            let mes = document.getElementById('mes');
+            mes.style.visibility = 'hidden';
+        }
+
+        ShowMes = (text, e) => {
+            let mes = document.getElementById('mes');
+            mes.innerHTML = text;
+            mes.style.visibility = 'visible';
+            if (timeout != undefined)
+                clearTimeout(timeout);
+            timeout = setTimeout(HiddenMes, 3000);
+            e.target.disabled = false;
+        }
+
+        Login = (e) => {
+            e.target.disabled = true;
+            let em_ph = document.getElementsByName('em_ph')[0].value;
+            let pas = document.getElementsByName('pas')[0].value;
+            $.get('LoginUser', { Email_Phone:em_ph,Pas:pas }, function (data) {
+                if (data === 'ok') {
+                    document.location.href = "@Url.Action("MainPage")";
+                }
+                else {
+                    ShowMes("Пользователя с такими данными не существует", e);
+                }
+            });
+        }
+
+        ThemeChange = (e) => {
+            e.target.disabled = true;
+            let link = document.head.getElementsByTagName('link')[0];
+            if (e.target.checked) {
+                link.href = "/Styles/login_dark.css";
+                 $.get('@Url.Action("Theme")', { theme: "dark" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+            else {
+                link.href = "/Styles/login_light.css";
+                  $.get('@Url.Action("Theme")', { theme: "light" }, function (data) {
+                    if (data === 'ok')
+                        e.target.disabled = false;
+                });   
+            }
+        }
+        var timeout;
+
+        var login = document.getElementsByClassName('login')[0];
+        login.addEventListener('click', Login);
+        var theme = document.getElementsByClassName('switch')[0].getElementsByTagName('input')[0];
+        theme.addEventListener('change', ThemeChange);
+    </script>
+
+</body>
+</html>

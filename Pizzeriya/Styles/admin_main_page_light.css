@@ -1,0 +1,343 @@
+﻿body, html {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: white;
+    color: black;
+}
+
+button {
+    width: 25px;
+    background-color: white;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+}
+
+    button:hover {
+        background-color: black;
+        color: white;
+    }
+
+
+.pizzas {
+    height: 500px;
+    width: 505px;
+    float: left;
+    margin-left: 50px;
+    margin-top: 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+    .pizzas::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .pizzas::-webkit-scrollbar-track-piece {
+        background-color: white;
+    }
+
+    .pizzas::-webkit-scrollbar-thumb {
+        background-color: black;
+    }
+
+.actions {
+    height: 500px;
+    width: 505px;
+    float: right;
+    margin-right: 50px;
+    margin-top: 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+    .actions::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .actions::-webkit-scrollbar-track-piece {
+        background-color: white;
+    }
+
+    .actions::-webkit-scrollbar-thumb {
+        background-color: black;
+    }
+
+.pizza {
+    width: 500px;
+    border: 1px solid black;
+    height: 50px;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+.name {
+    position: relative;
+    bottom: 10px;
+    left: 5px;
+}
+
+.weight {
+    position: relative;
+    bottom: 43px;
+    left: 100px;
+}
+
+.cost {
+    position: relative;
+    bottom: 77px;
+    left: 190px;
+}
+
+.avaible {
+    position: relative;
+    bottom: 111px;
+    left: 270px;
+}
+
+.ingr {
+    position: relative;
+    bottom: 125px;
+    left: 5px;
+    width:430px;
+    overflow: hidden;
+}
+
+.reg {
+    position: relative;
+    bottom: 180px;
+    left: 395px;
+    text-decoration: none;
+    height: 20px;
+}
+
+    .reg:hover {
+        color: #D10606;
+    }
+
+.action {
+    width: 500px;
+    border: 1px solid black;
+    height: 80px;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+.a_name {
+    position: relative;
+    bottom: 10px;
+    left: 5px;
+    overflow: hidden;
+    max-width: 275px;
+}
+
+.desc {
+    position: relative;
+    bottom: 20px;
+    left: 5px;
+    overflow: hidden;
+}
+
+.begin {
+    position: relative;
+    bottom: 78px;
+    left: 320px;
+}
+
+.end {
+    position: relative;
+    bottom: 146px;
+    left: 422px;
+}
+
+.razd {
+    position: relative;
+    bottom: 113px;
+    left: 399px;
+}
+
+.day {
+    position: relative;
+    bottom: 130px;
+    left: 5px;
+}
+
+.buy {
+    position: relative;
+    bottom: 163px;
+    left: 100px;
+}
+
+.count {
+    position: relative;
+    bottom: 197px;
+    left: 240px;
+}
+
+.discount {
+    position: relative;
+    bottom: 231px;
+    left: 320px;
+}
+
+.a_reg {
+    position: relative;
+    height: 20px;
+    bottom: 265px;
+    left: 395px;
+    text-decoration:none;
+
+}    
+
+    .a_reg:hover {
+        color: red;
+    }
+
+.logined {
+    position: absolute;
+    right: 50px;
+    top: 15px;
+}
+
+.user_name {
+    color: white !important;
+}
+
+.log_out {
+    color: white;
+}
+
+    .log_out:hover {
+        color: white;
+    }
+
+.nav {
+    height: 60px;
+    background-color: black;
+}
+
+.number {
+    font-size: 20px;
+    top: -5px;
+    left: 400px;
+    position: absolute;
+    color: white;
+}
+
+.main_pizza {
+    font-size: 24px;
+    position:absolute;
+    left:45.3%;
+    text-decoration:none;
+    color: white;
+}
+
+    .main_pizza:hover {
+        color: white;
+    }
+
+    .main_pizza:visited {
+        color: white;
+    }
+
+    #add_pizza{
+        width:150px;
+        position:absolute;
+        top:80px;
+        left:36%;
+    }
+
+#add_action {
+    width: 150px;
+    position: absolute;
+    top: 80px;
+    left: 57%;
+}
+
+.switch {
+    top: 10px;
+    left: 150px;
+    position: absolute;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+
+input:checked + .slider {
+    background-color: black;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+
+#delAction{
+    position:relative;
+    bottom:290px;
+    left:335px;
+    text-decoration:none;
+}
+
+#delAction:hover{
+    color:red;
+}
+
+#delPizza {
+    position: relative;
+    bottom: 160px;
+    left: 335px;
+    text-decoration: none;
+}
+
+    #delPizza:hover {
+        color: red;
+    }
